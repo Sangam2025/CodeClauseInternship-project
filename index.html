@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Basic Chat Application</title>
+    <style>
+        /* Add some basic styling for the chat area */
+        #chat {
+            width: 400px;
+            height: 300px;
+            border: 1px solid #ccc;
+            overflow-y: scroll;
+        }
+    </style>
+</head>
+<body>
+    <h1>Chat Application</h1>
+    <div id="chat"></div>
+    <input type="text" id="message" placeholder="Type your message...">
+    <button onclick="sendMessage()">Send</button>
+
+    <script>
+        const chatDiv = document.getElementById('chat');
+        const messageInput = document.getElementById('message');
+
+        const socket = new WebSocket('ws://localhost:8080'); // Replace with your WebSocket server URL
+
+        socket.onmessage = (event) => {
+            const message = event.data;
+            chatDiv.innerHTML += '<p>' + message + '</p>';
+            chatDiv.scrollTop = chatDiv.scrollHeight; // Auto-scroll to the bottom
+        };
+
+        function sendMessage() {
+            const message = messageInput.value;
+            socket.send(message);
+            messageInput.value = '';
+        }
+    </script>
+</body>
+</html>
